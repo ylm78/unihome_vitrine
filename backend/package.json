@@ -1,0 +1,42 @@
+{
+  "name": "unihome-backend",
+  "version": "1.0.0",
+  "description": "Backend API pour UNIHOME Vitrine",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "init-db": "node scripts/initDatabase.js",
+    "enrich": "node scripts/enrichProducts.js",
+    "setup": "node scripts/fullSetup.js",
+    "test-api": "node scripts/testAPI.js",
+    "add-videos-column": "node scripts/addVideosColumn.js",
+    "import-products": "node scripts/importProducts.js",
+    "update-images": "node scripts/updateProductImages.js",
+    "test-stripe": "node scripts/testStripe.js"
+  },
+  "keywords": [
+    "api",
+    "express",
+    "products"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "jsonwebtoken": "^9.0.2",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "sqlite3": "^5.1.6",
+    "stripe": "^20.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
