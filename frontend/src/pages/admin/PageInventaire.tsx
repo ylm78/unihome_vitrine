@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
-const API_URL = 'http://localhost:3001/api';
+import { API_URL } from '../../lib/api';
 
 interface Product {
   id: number;
@@ -327,4 +327,5 @@ export function PageInventaire() {
     </div>
   );
 }
+
 

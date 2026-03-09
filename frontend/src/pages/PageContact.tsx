@@ -1,8 +1,9 @@
 import { Mail, Phone, MapPin, Send, CheckCircle2 } from 'lucide-react';
-import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useSearchParams, useLocation } from 'react-router-dom';
 import { NavigationModerne } from '../components/NavigationModerne';
 import { FooterModerne } from '../components/FooterModerne';
+import { API_URL } from '../lib/api';
 
 const containerModels = [
   { id: 1, name: 'Maison Container 21 m²' },
@@ -18,6 +19,7 @@ const containerModels = [
 
 export function PageContact() {
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const modelId = searchParams.get('model');
   const selectedModel = modelId ? containerModels.find(m => m.id === Number(modelId)) : null;
   
@@ -28,14 +30,44 @@ export function PageContact() {
     message: '' 
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [formError, setFormError] = useState('');
+  const [formLoading, setFormLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    if ((location.state as { submitted?: boolean })?.submitted) {
+      setFormSubmitted(true);
+      setTimeout(() => setFormSubmitted(false), 3000);
+      window.history.replaceState({}, '', '/contact');
+    }
+  }, [location.state]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setFormSubmitted(true);
-    setTimeout(() => {
-      setFormSubmitted(false);
+    setFormError('');
+    setFormLoading(true);
+    try {
+      const res = await fetch(`${API_URL}/quote-requests`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          model: selectedModel?.name || '',
+          project: formData.message,
+          type: 'contact'
+        })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Erreur lors de l\'envoi');
+      setFormSubmitted(true);
       setFormData({ name: '', email: '', phone: '', message: '' });
-    }, 3000);
+      setTimeout(() => setFormSubmitted(false), 3000);
+    } catch (err) {
+      setFormError(err instanceof Error ? err.message : 'Une erreur est survenue');
+    } finally {
+      setFormLoading(false);
+    }
   };
 
   return (
@@ -145,12 +177,16 @@ export function PageContact() {
                       </p>
                     </div>
                   )}
+                  {formError && (
+                    <p className="text-red-400 text-sm">{formError}</p>
+                  )}
                   <div className="text-center">
                     <button
                       type="submit"
-                      className="bg-green-700 text-white px-10 py-3 rounded-md font-semibold hover:bg-green-800 transition-colors flex items-center gap-2 mx-auto"
+                      disabled={formLoading}
+                      className="bg-green-700 disabled:opacity-70 text-white px-10 py-3 rounded-md font-semibold hover:bg-green-800 transition-colors flex items-center gap-2 mx-auto"
                     >
-                      Envoyer
+                      {formLoading ? 'Envoi...' : 'Envoyer'}
                       <Send className="w-5 h-5" />
                     </button>
                   </div>

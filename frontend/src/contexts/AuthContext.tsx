@@ -21,15 +21,27 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const API_URL = 'http://localhost:3001/api';
+import { API_URL, API_BASE } from '../lib/api';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Charger le token depuis localStorage au démarrage
+  // Priorité 1 : token dans l'URL (callback Google)
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tokenFromUrl = urlParams.get('token');
+    if (tokenFromUrl) {
+      setLoading(true);
+      setToken(tokenFromUrl);
+      localStorage.setItem('token', tokenFromUrl);
+      window.history.replaceState({}, document.title, window.location.pathname);
+      fetchUserProfile(tokenFromUrl);
+      return;
+    }
+
+    // Priorité 2 : token dans localStorage
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
       setToken(storedToken);
@@ -39,25 +51,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  // Vérifier le token depuis l'URL (callback Google)
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const tokenFromUrl = urlParams.get('token');
-    if (tokenFromUrl) {
-      console.log('🔑 Token reçu depuis l\'URL, traitement...');
-      setToken(tokenFromUrl);
-      localStorage.setItem('token', tokenFromUrl);
-      fetchUserProfile(tokenFromUrl);
-      // Nettoyer l'URL
-      window.history.replaceState({}, document.title, window.location.pathname);
-    } else {
-      console.log('ℹ️ Aucun token dans l\'URL');
-    }
-  }, []);
-
   const fetchUserProfile = async (authToken: string) => {
     try {
-      console.log('📡 Récupération du profil utilisateur...');
       const response = await fetch(`${API_URL}/auth/me`, {
         headers: {
           'Authorization': `Bearer ${authToken}`
@@ -66,23 +61,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('📦 Données reçues:', data);
         if (data.success) {
-          console.log('✅ Profil utilisateur chargé:', data.data?.email);
           setUser(data.data);
-        } else {
-          console.warn('⚠️ Réponse non réussie:', data);
         }
       } else {
-        console.error('❌ Erreur HTTP:', response.status, response.statusText);
-        const errorData = await response.json().catch(() => ({}));
-        console.error('Détails:', errorData);
         // Token invalide, supprimer
         localStorage.removeItem('token');
         setToken(null);
       }
-    } catch (error) {
-      console.error('❌ Erreur lors de la récupération du profil:', error);
+    } catch {
       localStorage.removeItem('token');
       setToken(null);
     } finally {
@@ -175,6 +162,6 @@ export function useAuth() {
 
 // Export pour Google login
 export const loginWithGoogle = () => {
-  window.location.href = 'http://localhost:3001/api/auth/google';
+  window.location.href = `${API_BASE}/api/auth/google`;
 };
 

@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { User, Mail, Phone, Save, ArrowLeft } from 'lucide-react';
 
-const API_URL = 'http://localhost:3001/api';
+import { API_URL } from '../lib/api';
 
 export function PageProfile() {
   const { user, token } = useAuth();

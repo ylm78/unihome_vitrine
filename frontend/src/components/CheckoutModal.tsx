@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { X, Loader2, CreditCard } from 'lucide-react';
+import { API_URL } from '../lib/api';
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -34,7 +35,7 @@ export function CheckoutModal({ isOpen, onClose, product, finishMode = 'indus' }
     try {
       console.log('🚀 Début de la création de session checkout:', { productId: product.id, finishMode, email, name });
       
-      const response = await fetch('http://localhost:3001/api/payments/create-checkout-session', {
+      const response = await fetch(`${API_URL}/payments/create-checkout-session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

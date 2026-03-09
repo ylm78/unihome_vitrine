@@ -12,7 +12,7 @@ const ContactModal = lazy(() => import('../components/ContactModal').then(m => (
 import { UserMenu } from '../components/UserMenu';
 import { useAuth } from '../contexts/AuthContext';
 
-const API_URL = 'http://localhost:3001/api';
+import { API_URL } from '../lib/api';
 
 // Filtres par caractéristiques premium
 const FILTERS = [
@@ -219,6 +219,9 @@ export function PageAccueilModerne() {
             <a href="#models" className={`hover:text-green-500 font-medium transition-colors whitespace-nowrap text-sm xl:text-base ${
               scrolled ? 'text-gray-600' : 'text-gray-100'
             }`}>Nos Produits</a>
+            <Link to="/installations-chantier" className={`hover:text-green-500 font-medium transition-colors whitespace-nowrap text-sm xl:text-base ${
+              scrolled ? 'text-gray-600' : 'text-gray-100'
+            }`}>Installations Chantier</Link>
             <a href="#philosophie" className={`hover:text-green-500 font-medium transition-colors whitespace-nowrap text-sm xl:text-base ${
               scrolled ? 'text-gray-600' : 'text-gray-100'
             }`}>Notre Philosophie</a>
@@ -239,6 +242,9 @@ export function PageAccueilModerne() {
             <a href="#models" className={`hover:text-green-500 font-medium transition-colors text-sm ${
               scrolled ? 'text-gray-600' : 'text-gray-100'
             }`}>Produits</a>
+            <Link to="/installations-chantier" className={`hover:text-green-500 font-medium transition-colors text-sm ${
+              scrolled ? 'text-gray-600' : 'text-gray-100'
+            }`}>Chantier</Link>
             <button 
               onClick={() => handleOpenContact()}
               className="bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded-full text-xs font-medium transition-colors shadow-lg shadow-green-500/30 whitespace-nowrap"
@@ -267,6 +273,7 @@ export function PageAccueilModerne() {
           <div className="md:hidden bg-white absolute top-full left-0 w-full shadow-xl border-t">
             <div className="flex flex-col p-4 gap-4">
               <a href="#models" onClick={() => setMobileMenuOpen(false)} className="text-gray-700 font-medium">Nos Produits</a>
+              <Link to="/installations-chantier" onClick={() => setMobileMenuOpen(false)} className="text-gray-700 font-medium">Installations Chantier</Link>
               <a href="#philosophie" onClick={() => setMobileMenuOpen(false)} className="text-gray-700 font-medium">Notre Philosophie</a>
               <a href="#concept" onClick={() => setMobileMenuOpen(false)} className="text-gray-700 font-medium">Technologie</a>
               <button 
@@ -532,6 +539,22 @@ export function PageAccueilModerne() {
         </div>
       </section>
 
+      {/* Installations Chantier - Bandeau B2B */}
+      <section className="py-12 bg-green-700 text-white">
+        <div className="container mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div>
+            <h3 className="text-xl sm:text-2xl font-bold mb-2">Installations de chantier</h3>
+            <p className="text-green-100 text-sm sm:text-base">Packs clés en main : location et achat pour artisans et chefs de chantier</p>
+          </div>
+          <Link 
+            to="/installations-chantier" 
+            className="bg-white text-green-800 hover:bg-green-50 px-6 py-3 rounded-full font-bold whitespace-nowrap transition-colors shadow-lg flex-shrink-0"
+          >
+            Voir les packs →
+          </Link>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-24 bg-gray-900 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-amber-600 rounded-full mix-blend-overlay filter blur-3xl opacity-20 animate-pulse"></div>
@@ -571,6 +594,7 @@ export function PageAccueilModerne() {
               <h3 className="text-white font-bold mb-6 uppercase text-sm tracking-wider">Navigation</h3>
               <ul className="space-y-3 text-sm">
                 <li><a href="#models" onClick={(e) => { e.preventDefault(); scrollToModels(); }} className="hover:text-green-400 transition-colors cursor-pointer">Nos Produits</a></li>
+                <li><Link to="/installations-chantier" className="hover:text-green-400 transition-colors">Installations Chantier</Link></li>
                 <li><a href="#philosophie" onClick={(e) => { e.preventDefault(); document.getElementById('philosophie')?.scrollIntoView({ behavior: 'smooth' }); }} className="hover:text-green-400 transition-colors cursor-pointer">Notre Philosophie</a></li>
                 <li><a href="#concept" onClick={(e) => { e.preventDefault(); document.getElementById('concept')?.scrollIntoView({ behavior: 'smooth' }); }} className="hover:text-green-400 transition-colors cursor-pointer">Technologie</a></li>
                 <li><button onClick={() => handleOpenContact()} className="hover:text-green-400 transition-colors text-left">Contact</button></li>

@@ -13,6 +13,7 @@ import productRoutes from './routes/productRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
+import quoteRoutes from './routes/quoteRoutes.js';
 import './config/passport.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 
@@ -20,18 +21,33 @@ const app = express();
 
 // Headers de sécurité
 app.use((req, res, next) => {
-  // Headers de sécurité
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
-  
-  // Cache pour les assets statiques
+
+  // HSTS : forcer HTTPS (activer uniquement en production avec HTTPS)
+  if (process.env.NODE_ENV === 'production') {
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+  }
+
+  // CSP : protection contre XSS (adapter selon vos domaines)
+  const cspDirectives = [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com",
+    "img-src 'self' data: https: blob:",
+    "connect-src 'self' https://api.stripe.com https://*.supabase.co",
+    "frame-src https://js.stripe.com https://hooks.stripe.com",
+  ];
+  res.setHeader('Content-Security-Policy', cspDirectives.join('; '));
+
   if (req.path.startsWith('/assets/') || req.path.startsWith('/images/')) {
     res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
   }
-  
+
   next();
 });
 
@@ -90,6 +106,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/quote-requests', quoteRoutes);
 
 // Middleware de gestion des erreurs
 app.use(notFoundHandler);

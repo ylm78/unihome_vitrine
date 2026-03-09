@@ -8,22 +8,11 @@ export function PageAuthCallback() {
   const { user, loading } = useAuth();
 
   useEffect(() => {
-    console.log('🔄 PageAuthCallback - État:', { user: !!user, loading });
-    
-    // Le token est déjà géré par AuthContext via l'URL
     if (!loading) {
       if (user) {
-        console.log('✅ Utilisateur connecté, redirection vers l\'accueil');
-        // Rediriger vers l'accueil si connecté
-        setTimeout(() => {
-          navigate('/');
-        }, 1000);
+        navigate('/');
       } else {
-        console.log('❌ Aucun utilisateur, redirection vers login');
-        // Rediriger vers login si erreur
-        setTimeout(() => {
-          navigate('/login?error=auth_failed');
-        }, 1000);
+        navigate('/login?error=auth_failed');
       }
     }
   }, [user, loading, navigate]);

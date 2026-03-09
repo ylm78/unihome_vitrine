@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Search, Mail, Phone, Calendar, Package, UserCheck } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
-const API_URL = 'http://localhost:3001/api';
+import { API_URL } from '../../lib/api';
 
 interface User {
   id: number;
@@ -259,4 +259,5 @@ export function PageClients() {
     </div>
   );
 }
+
 

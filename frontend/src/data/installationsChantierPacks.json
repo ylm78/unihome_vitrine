@@ -1,0 +1,66 @@
+{
+  "packs": [
+    {
+      "id": "pack-installation-cloture",
+      "title": "Pack Installation & Clôture",
+      "slug": "pack-installation-cloture",
+      "description": "Délimitez et sécurisez votre zone de chantier en toute conformité légale. Installation rapide, prête avant le démarrage des travaux.",
+      "equipments": [
+        "Clôtures mobiles (3,5m x 2m)",
+        "Plots en béton/plastique recyclé",
+        "Colliers de serrage de sécurité",
+        "Panneau d'affichage légal"
+      ],
+      "icon": "shield"
+    },
+    {
+      "id": "pack-base-vie",
+      "title": "Pack Base de Vie Essentielle",
+      "slug": "pack-base-vie-essentielle",
+      "description": "Hygiène et confort réglementaires pour vos équipes. Une base de vie opérationnelle dès la mise en place sur chantier.",
+      "equipments": [
+        "Bungalow modulaire (6m x 2,4m) chauffé",
+        "Cabine sanitaire autonome avec entretien",
+        "Point d'eau autonome"
+      ],
+      "icon": "home"
+    },
+    {
+      "id": "pack-stockage-securise",
+      "title": "Pack Stockage Sécurisé",
+      "slug": "pack-stockage-securise",
+      "description": "Protégez votre matériel de valeur contre le vol et les intempéries. Stockage sécurisé et accessible sur l'ensemble du site.",
+      "equipments": [
+        "Conteneur maritime (10 ou 20 pieds)",
+        "Cadenas haute sécurité anti-effraction",
+        "Étagères métalliques intérieures"
+      ],
+      "icon": "lock"
+    },
+    {
+      "id": "pack-energie-hiver",
+      "title": "Pack Énergie & Hiver",
+      "slug": "pack-energie-hiver",
+      "description": "Alimentation électrique et éclairage puissants pour travailler en continu. Même en hiver ou sur sites non raccordés.",
+      "equipments": [
+        "Groupe électrogène (10 à 20 kVA)",
+        "Coffret de distribution électrique",
+        "Mât d'éclairage télescopique LED",
+        "Rallonges industrielles"
+      ],
+      "icon": "zap"
+    },
+    {
+      "id": "pack-proprete-evacuation",
+      "title": "Pack Propreté & Évacuation",
+      "slug": "pack-proprete-evacuation",
+      "description": "Gérez les gravats et maintenez un chantier propre et sûr. Conformité et sécurité pour vos équipes et le voisinage.",
+      "equipments": [
+        "Kit de goulottes à gravats avec trémie de départ",
+        "Support de fixation",
+        "Aspirateur industriel eau et poussière"
+      ],
+      "icon": "trash"
+    }
+  ]
+}

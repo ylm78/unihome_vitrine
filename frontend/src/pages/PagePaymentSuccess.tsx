@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { CheckCircle, Home, Package } from 'lucide-react';
+import { API_URL } from '../lib/api';
 
 export function PagePaymentSuccess() {
   const [searchParams] = useSearchParams();
@@ -10,7 +11,7 @@ export function PagePaymentSuccess() {
 
   useEffect(() => {
     if (sessionId) {
-      fetch(`http://localhost:3001/api/payments/session/${sessionId}`)
+      fetch(`${API_URL}/payments/session/${sessionId}`)
         .then(res => res.json())
         .then(data => {
           if (data.success) {

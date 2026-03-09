@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Search, Filter, Package, DollarSign, Calendar, CheckCircle, XCircle, Clock } from 'lucide-react';
 
-const API_URL = 'http://localhost:3001/api';
+import { API_URL } from '../../lib/api';
 
 interface Order {
   id: number;
@@ -300,4 +300,5 @@ export function PageCommandes() {
     </div>
   );
 }
+
 

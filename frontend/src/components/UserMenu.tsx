@@ -7,7 +7,7 @@ import { User, LogOut, ChevronDown, Settings, Shield } from 'lucide-react';
 export function UserMenu() {
   const { user, logout, isAuthenticated } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-  const isAdmin = isAdminEmail(user?.email);
+  const isAdmin = user?.role === 'admin' || isAdminEmail(user?.email);
 
   if (!isAuthenticated || !user) {
     return (

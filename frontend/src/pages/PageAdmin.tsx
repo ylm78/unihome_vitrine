@@ -8,11 +8,12 @@ import { PageInventaire } from './admin/PageInventaire';
 import { PageProductForm } from './admin/PageProductForm';
 import { PageClients } from './admin/PageClients';
 import { PageCommandes } from './admin/PageCommandes';
+import { PageDevis } from './admin/PageDevis';
 
 export function PageAdmin() {
   const navigate = useNavigate();
   const { user, isAuthenticated, loading } = useAuth();
-  const isAdmin = isAdminEmail(user?.email);
+  const isAdmin = user?.role === 'admin' || isAdminEmail(user?.email);
 
   // Rediriger si pas authentifié ou pas admin
   useEffect(() => {
@@ -54,7 +55,8 @@ export function PageAdmin() {
         <Route path="inventaire/:id" element={<PageProductForm />} />
         <Route path="clients" element={<PageClients />} />
         <Route path="commandes" element={<PageCommandes />} />
-        {/* Les autres routes seront ajoutées progressivement */}
+        <Route path="demandes-contact" element={<PageDevis defaultType="contact" />} />
+        <Route path="demandes-devis" element={<PageDevis defaultType="quote" />} />
       </Routes>
     </AdminLayout>
   );

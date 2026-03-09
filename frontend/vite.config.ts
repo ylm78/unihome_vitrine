@@ -13,16 +13,13 @@ export default defineConfig({
   server: {
     port: 5090,
   },
+  esbuild: {
+    drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : [],
+  },
   build: {
-    // Optimisations pour la production
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true, // Supprimer les console.log en production
-        drop_debugger: true,
-        pure_funcs: ['console.log', 'console.info', 'console.debug'],
-      },
-    },
+    minify: 'esbuild',
+    target: 'es2020',
+    cssMinify: true,
     rollupOptions: {
       output: {
         manualChunks: {

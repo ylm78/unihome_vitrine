@@ -83,3 +83,4 @@ frontend/src/
 4. **Page Paramètres** - Configuration de l'admin
 5. **Intégration graphiques** - Chart.js ou Recharts pour les statistiques
 
+

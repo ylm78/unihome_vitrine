@@ -303,6 +303,14 @@ export function Navigation() {
               Projets
             </Link>
             <Link 
+              to="/installations-chantier" 
+              className={`px-4 py-2 transition-colors font-medium text-sm ${
+                location.pathname === '/installations-chantier' ? 'text-green-700' : 'text-gray-700 hover:text-green-700'
+              }`}
+            >
+              Installations Chantier
+            </Link>
+            <Link 
               to="/galeries" 
               className={`px-4 py-2 transition-colors font-medium text-sm ${
                 location.pathname === '/galeries' ? 'text-green-700' : 'text-gray-700 hover:text-green-700'
@@ -336,6 +344,7 @@ export function Navigation() {
             <Link to="/" onClick={() => setMenuOpen(false)} className="block text-gray-700 hover:text-green-700 py-2 px-2 transition-colors font-medium text-sm sm:text-base">Accueil</Link>
             <Link to="/container/maison-container" onClick={() => setMenuOpen(false)} className="block text-gray-700 hover:text-green-700 py-2 px-2 transition-colors font-medium text-sm sm:text-base">Maison Container</Link>
             <Link to="/projets" onClick={() => setMenuOpen(false)} className="block text-gray-700 hover:text-green-700 py-2 px-2 transition-colors font-medium text-sm sm:text-base">Projets</Link>
+            <Link to="/installations-chantier" onClick={() => setMenuOpen(false)} className="block text-gray-700 hover:text-green-700 py-2 px-2 transition-colors font-medium text-sm sm:text-base">Installations Chantier</Link>
             <Link to="/galeries" onClick={() => setMenuOpen(false)} className="block text-gray-700 hover:text-green-700 py-2 px-2 transition-colors font-medium text-sm sm:text-base">Galeries</Link>
             <Link to="/contact" onClick={() => setMenuOpen(false)} className="block bg-green-700 text-white rounded-md px-4 py-2 hover:bg-green-800 transition-colors font-semibold text-center text-sm sm:text-base mt-2">Contact</Link>
             <div className="border-t border-gray-200 my-2"></div>

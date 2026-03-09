@@ -1,6 +1,7 @@
 import { X, Mail } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../lib/api';
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -16,21 +17,37 @@ export function ContactModal({ isOpen, onClose, prefilledModel }: ContactModalPr
     model: prefilledModel || '',
     project: ''
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Rediriger vers la page contact avec les données
-    navigate('/contact', {
-      state: {
-        name: formData.name,
-        email: formData.email,
-        model: formData.model,
-        project: formData.project
-      }
-    });
-    onClose();
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch(`${API_URL}/quote-requests`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: '',
+          model: formData.model,
+          project: formData.project,
+          type: 'quote'
+        })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Erreur lors de l\'envoi');
+      onClose();
+      navigate('/contact', { state: { submitted: true } });
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Une erreur est survenue');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -90,17 +107,15 @@ export function ContactModal({ isOpen, onClose, prefilledModel }: ContactModalPr
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Modèle intéressé</label>
-            <select 
+            <label className="block text-sm font-medium text-gray-700 mb-1">Modèle / Pack intéressé</label>
+            <input
+              type="text"
               name="model"
               value={formData.model}
               onChange={handleChange}
               className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all"
-            >
-              <option value="">Je ne sais pas encore</option>
-              {prefilledModel && <option value={prefilledModel}>{prefilledModel}</option>}
-              <option value="Sur mesure">Projet Sur-Mesure</option>
-            </select>
+              placeholder={prefilledModel || "ex: Pack Installation & Clôture"}
+            />
           </div>
           
           <div>
@@ -114,11 +129,15 @@ export function ContactModal({ isOpen, onClose, prefilledModel }: ContactModalPr
             ></textarea>
           </div>
           
+          {error && (
+            <p className="text-red-600 text-sm">{error}</p>
+          )}
           <button 
             type="submit" 
-            className="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-4 rounded-xl transition-all shadow-lg hover:translate-y-[-2px]"
+            disabled={loading}
+            className="w-full bg-green-700 hover:bg-green-800 disabled:opacity-70 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl transition-all shadow-lg hover:translate-y-[-2px]"
           >
-            Envoyer ma demande
+            {loading ? 'Envoi en cours...' : 'Envoyer ma demande'}
           </button>
         </form>
       </div>

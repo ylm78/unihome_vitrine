@@ -115,6 +115,37 @@ export const initDatabase = async () => {
     await dbRun(`CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status)`);
     await dbRun(`CREATE INDEX IF NOT EXISTS idx_orders_product ON orders(product_id)`);
 
+    // Table des demandes (contact + devis)
+    await dbRun(`
+      CREATE TABLE IF NOT EXISTS quote_requests (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        customer_name TEXT NOT NULL,
+        customer_email TEXT NOT NULL,
+        customer_phone TEXT,
+        model TEXT,
+        project TEXT,
+        status TEXT DEFAULT 'pending',
+        source TEXT DEFAULT 'site',
+        request_type TEXT DEFAULT 'quote',
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    await dbRun(`CREATE INDEX IF NOT EXISTS idx_quote_requests_status ON quote_requests(status)`);
+    await dbRun(`CREATE INDEX IF NOT EXISTS idx_quote_requests_created ON quote_requests(created_at)`);
+
+    // Migration: ajouter request_type si la table existait déjà sans cette colonne
+    try {
+      await dbRun(`ALTER TABLE quote_requests ADD COLUMN request_type TEXT DEFAULT 'quote'`);
+    } catch (e) {
+      if (!e.message?.includes('duplicate column')) throw e;
+    }
+    try {
+      await dbRun(`ALTER TABLE quote_requests ADD COLUMN is_favorite INTEGER DEFAULT 0`);
+    } catch (e) {
+      if (!e.message?.includes('duplicate column')) throw e;
+    }
+    await dbRun(`CREATE INDEX IF NOT EXISTS idx_quote_requests_type ON quote_requests(request_type)`);
+
     console.log('Base de données initialisée avec succès');
     
     // Initialiser les tables d'authentification

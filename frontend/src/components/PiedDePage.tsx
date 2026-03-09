@@ -4,7 +4,15 @@ export function PiedDePage() {
   return (
     <footer className="bg-gray-900 text-gray-400 py-12 px-4">
       <div className="max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
+          {/* Installations Chantier */}
+          <div>
+            <h4 className="text-white font-bold mb-4">Installations Chantier</h4>
+            <ul className="space-y-2 text-sm">
+              <li><Link to="/installations-chantier" className="hover:text-green-500 transition-colors">Packs Location & Achat</Link></li>
+            </ul>
+          </div>
+
           {/* Bâtiment Préfabriqué */}
           <div>
             <h4 className="text-white font-bold mb-4">Bâtiment Préfabriqué</h4>

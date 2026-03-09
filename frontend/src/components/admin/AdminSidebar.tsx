@@ -3,6 +3,8 @@ import {
   LayoutDashboard,
   Package,
   ShoppingCart,
+  FileText,
+  MessageSquare,
   Users,
   Settings,
   X,
@@ -18,6 +20,8 @@ const navigation = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { name: 'Inventaire', href: '/admin/inventaire', icon: Package },
   { name: 'Commandes', href: '/admin/commandes', icon: ShoppingCart },
+  { name: 'Demandes de contact', href: '/admin/demandes-contact', icon: MessageSquare },
+  { name: 'Demandes de devis', href: '/admin/demandes-devis', icon: FileText },
   { name: 'Clients', href: '/admin/clients', icon: Users },
   { name: 'Paramètres', href: '/admin/parametres', icon: Settings },
 ];
@@ -156,4 +160,5 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
     </>
   );
 }
+
 

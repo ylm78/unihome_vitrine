@@ -33,7 +33,7 @@ export function PageLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-green-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-gradient-to-br from-gray-50 to-green-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8" role="main" aria-label="Formulaire de connexion">
       <div className="max-w-md w-full space-y-8">
         {/* Logo et titre */}
         <div className="text-center">
@@ -197,7 +197,7 @@ export function PageLogin() {
           </Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 

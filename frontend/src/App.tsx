@@ -4,9 +4,9 @@ import { AuthProvider } from './contexts/AuthContext';
 import { Navigation } from './components/Navigation';
 import { PiedDePage } from './components/PiedDePage';
 import { ScrollToTop } from './components/ScrollToTop';
-import { PageAccueilModerne } from './pages/PageAccueilModerne';
 
-// Lazy loading des pages pour réduire le bundle initial
+// Lazy loading de TOUTES les pages pour réduire le bundle initial (incl. /login)
+const PageAccueilModerne = lazy(() => import('./pages/PageAccueilModerne').then(m => ({ default: m.PageAccueilModerne })));
 const PageAccueil = lazy(() => import('./pages/PageAccueil').then(m => ({ default: m.PageAccueil })));
 const PageMaisonContainer = lazy(() => import('./pages/PageMaisonContainer').then(m => ({ default: m.PageMaisonContainer })));
 const PageProjets = lazy(() => import('./pages/PageProjets').then(m => ({ default: m.PageProjets })));
@@ -25,6 +25,7 @@ const PagePolitiqueConfidentialite = lazy(() => import('./pages/PagePolitiqueCon
 const PagePolitiqueCookies = lazy(() => import('./pages/PagePolitiqueCookies').then(m => ({ default: m.PagePolitiqueCookies })));
 const PageCGV = lazy(() => import('./pages/PageCGV').then(m => ({ default: m.PageCGV })));
 const PageCGU = lazy(() => import('./pages/PageCGU').then(m => ({ default: m.PageCGU })));
+const PageInstallationsChantier = lazy(() => import('./pages/PageInstallationsChantier').then(m => ({ default: m.PageInstallationsChantier })));
 
 // Composant de chargement
 const LoadingFallback = () => (
@@ -43,7 +44,9 @@ function App() {
         <ScrollToTop />
         <Routes>
           {/* Page moderne avec son propre header - pas de Navigation/PiedDePage */}
-          <Route path="/" element={<PageAccueilModerne />} />
+          <Route path="/" element={<Suspense fallback={<LoadingFallback />}><PageAccueilModerne /></Suspense>} />
+          {/* Installations Chantier - même style que page d'accueil (nav + footer intégrés) */}
+          <Route path="/installations-chantier" element={<Suspense fallback={<LoadingFallback />}><PageInstallationsChantier /></Suspense>} />
           
           {/* Toutes les autres pages avec navigation commune */}
           <Route path="/*" element={
