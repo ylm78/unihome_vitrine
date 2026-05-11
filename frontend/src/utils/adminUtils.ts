@@ -3,7 +3,7 @@
  */
 
 // Email de l'administrateur autorisé
-export const ADMIN_EMAIL = 'arifxhakan78@gmail.com'; // Note: corrigé avec @
+export const ADMIN_EMAIL = 'unicold.com@gmail.com'; // Note: corrigé avec @
 
 /**
  * Vérifie si un email correspond à l'administrateur
