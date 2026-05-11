@@ -7,11 +7,10 @@ const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 
 // Configuration de la stratégie Google OAuth
 if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
-  // Construire l'URL complète du callback
-  const BACKEND_URL = process.env.BACKEND_URL || process.env.PORT 
-    ? `http://localhost:${process.env.PORT || 3001}`
-    : 'http://localhost:3001';
-  const callbackURL = `${BACKEND_URL}/api/auth/google/callback`;
+  const P = (process.env.API_PUBLIC_PREFIX || '').replace(/\/$/, '');
+  const BACKEND_URL =
+    process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 3001}`;
+  const callbackURL = `${BACKEND_URL}${P}/api/auth/google/callback`;
   
   console.log('🔐 Configuration Google OAuth:');
   console.log('   Callback URL:', callbackURL);

@@ -19,6 +19,9 @@ import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 
 const app = express();
 
+/** Préfixe URL (ex. Vercel multi-services : /_/backend). Laisser vide en local. */
+const P = (process.env.API_PUBLIC_PREFIX || '').replace(/\/$/, '');
+
 // Headers de sécurité
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -80,7 +83,7 @@ app.use((req, res, next) => {
 });
 
 // Routes de santé
-app.get('/health', (req, res) => {
+app.get(`${P}/health`, (req, res) => {
   res.json({
     success: true,
     message: 'API UNIHOME est opérationnelle',
@@ -88,25 +91,25 @@ app.get('/health', (req, res) => {
   });
 });
 
-app.get('/api', (req, res) => {
+app.get(`${P}/api`, (req, res) => {
   res.json({
     success: true,
     message: 'API UNIHOME - Backend pour la vitrine',
     version: '1.0.0',
     endpoints: {
-      health: '/health',
-      products: '/api/products',
-      categories: '/api/categories'
+      health: `${P}/health`,
+      products: `${P}/api/products`,
+      categories: `${P}/api/categories`
     }
   });
 });
 
 // Routes API
-app.use('/api/products', productRoutes);
-app.use('/api/categories', categoryRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/payments', paymentRoutes);
-app.use('/api/quote-requests', quoteRoutes);
+app.use(`${P}/api/products`, productRoutes);
+app.use(`${P}/api/categories`, categoryRoutes);
+app.use(`${P}/api/auth`, authRoutes);
+app.use(`${P}/api/payments`, paymentRoutes);
+app.use(`${P}/api/quote-requests`, quoteRoutes);
 
 // Middleware de gestion des erreurs
 app.use(notFoundHandler);

@@ -1,20 +1,70 @@
 # Déploiement sur Vercel
 
-## Option A (recommandée) : dossier `frontend`
+## Mode « Services » (monorepo, racine `./`)
 
-1. [vercel.com](https://vercel.com) → **Add New Project** → importer ce dépôt GitHub.
-2. **Root Directory** : `frontend` (Important : pas la racine du repo.)
-3. Framework : Vite (détecté automatiquement).
-4. **Environment Variables** → ajouter :
-   - `VITE_API_URL` = URL publique de ton API, par ex. `https://ton-backend.railway.app/api`  
-     (sans cette variable, le site s’affiche mais login / formulaires / admin ne fonctionnent pas.)
-5. **Deploy**. Tu obtiens un lien `https://ton-projet.vercel.app`.
+Le fichier `vercel.json` à la racine définit **experimentalServices** :
 
-## Option B : racine du repo
+- **frontend** (Vite) → `/`
+- **backend** (Express) → `/_/backend`
 
-Ne pas changer le Root Directory : Vercel utilise le `vercel.json` à la racine du dépôt (`installCommand` / `buildCommand` / `outputDirectory`).
+Sur Vercel : **Root Directory** = `./` (racine du repo), preset **Services**.
 
-Même variable `VITE_API_URL` à configurer dans le projet Vercel.
+### Variables d’environnement (à configurer sur Vercel)
+
+**Frontend (build)** — toutes les previews / prod :
+
+| Clé | Valeur |
+|-----|--------|
+| `VITE_API_URL` | `/_/backend/api` |
+
+**Backend (runtime)** — même projet :
+
+| Clé | Valeur |
+|-----|--------|
+| `API_PUBLIC_PREFIX` | `/_/backend` |
+| `BACKEND_URL` | `https://TON-PROJET.vercel.app` (URL exacte du déploiement, sans slash final) |
+| `FRONTEND_URL` | `https://TON-PROJET.vercel.app` |
+| `SESSION_SECRET`, `JWT_SECRET`, `GOOGLE_*`, `STRIPE_*`, etc. | comme en local |
+
+**Google OAuth** : dans la console Google, ajoute l’URI de redirection  
+`https://TON-PROJET.vercel.app/_/backend/api/auth/google/callback`.
+
+Après le premier déploiement, remplace `TON-PROJET` par le nom réel (ex. `unihome-vitrine`).
+
+### Si le déploiement du backend échoue
+
+Express + SQLite sur Vercel « Services » peut ne pas être supporté comme un serveur Node classique. Dans ce cas :
+
+1. Héberge l’API sur **Railway**, **Render**, etc.
+2. Remplace `experimentalServices` dans `vercel.json` par **un seul service** `frontend` (voir section ci‑dessous), ou crée un second projet Vercel uniquement pour le frontend avec **Root Directory** = `frontend`.
+3. Mets `VITE_API_URL` = `https://ton-api.railway.app/api` (URL HTTPS réelle).
+
+### Fichier `vercel.json` — frontend seul (sans backend Vercel)
+
+```json
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "experimentalServices": {
+    "frontend": {
+      "entrypoint": "frontend",
+      "routePrefix": "/",
+      "framework": "vite"
+    }
+  }
+}
+```
+
+Puis dans l’UI Vercel, ne garde qu’un service **frontend** (retire le service backend du preset).
+
+---
+
+## Option classique : un seul projet frontend
+
+1. [vercel.com](https://vercel.com) → **Add New Project** → importer le repo.
+2. **Root Directory** : `frontend`.
+3. Framework : Vite.
+4. `VITE_API_URL` = URL publique de ton API (ex. Railway).
+5. **Deploy**.
 
 ## OAuth Google
 
